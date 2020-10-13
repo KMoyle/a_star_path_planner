@@ -1,8 +1,6 @@
 #ifndef MAP_CELL_H
 #define MAP_CELL_H
 
-#include <Map_Cell.h>
-
 
 class MapCell
 {
@@ -35,7 +33,7 @@ class MapCell
 
 
 
-        virtual ~MapCell();
+        virtual ~MapCell(){};
 
     private:
 

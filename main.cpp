@@ -1,10 +1,16 @@
 #include <iostream>
-#include <A_Star_Path_Planner.h>
+#include "include/A_Star_Path_Planner.h"
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello world!" << endl;
+
+    MapCell start(0,0);
+    MapCell goal(9,9);
+
+    A_Star_Path_Planner AStar( start, goal );
+
+
     return 0;
 }
