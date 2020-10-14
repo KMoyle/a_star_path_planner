@@ -15,12 +15,13 @@ class A_Star_Path_Planner
     public:
         A_Star_Path_Planner( MapCell , MapCell );
 
-        float return_g_score( MapCell* , MapCell* );
+        float return_g_score( MapCell* ,float );
         float return_h_score( MapCell* );
 
         void add_neighbours( MapCell* );
-        float get_best_neighbour( float );
+        MapCell *get_best_neighbour( );
 
+        void print_path( std::vector<MapCell *> );
         bool found_goal;
 
         virtual ~A_Star_Path_Planner();
@@ -38,7 +39,7 @@ class A_Star_Path_Planner
         std::vector<MapCell> grid_; //main grid containing map cells
         std::vector<MapCell *> parent_; //layer array containing pointers to parent cell for each cell
         std::vector<MapCell *> path_; // layer array containing returned best path
-        std::vector<MapCell *> neighbours_; // layer array containing neihbours of current MapCell
+        std::vector<float> neighbour_ids_; // layer array containing neihbours of current MapCell
 
         std::list<MapCell *> open_set_; //list of opened mapcells
         std::list<MapCell *> closed_set_; //list of closed mapcells

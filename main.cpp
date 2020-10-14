@@ -7,7 +7,7 @@ int main()
 {
 
     MapCell start(0,0);
-    MapCell goal(9,9);
+    MapCell goal(8,9);
 
     A_Star_Path_Planner AStar( start, goal );
 
