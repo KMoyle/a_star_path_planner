@@ -7,7 +7,7 @@ int main()
 {
 
     MapCell start(0,0);
-    MapCell goal(99,99);
+    MapCell goal(9,9);
 
     //creating a row major vector to emulate the ROS nav_msgs/OccupancyGrid
     std::vector<int> map_( 10 * 10 );
@@ -19,14 +19,14 @@ int main()
             } else if ( y == 8 && x > 4 &&  x < 9 ){
                 map_[ x + y * 10 ] = 0;
             } else {
-                map_[ x + y * 10 ];
+                map_[ x + y * 10 ] = 1;
             }
         }
     }
 
 
 
-    A_Star_Path_Planner AStar( start, goal );
+    A_Star_Path_Planner AStar( start, goal, map_ );
 
 
     return 0;

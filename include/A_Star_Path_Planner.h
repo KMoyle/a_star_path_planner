@@ -14,7 +14,7 @@
 class A_Star_Path_Planner
 {
     public:
-        A_Star_Path_Planner( MapCell , MapCell );
+        A_Star_Path_Planner( MapCell , MapCell,  std::vector<int> );
 
         float return_g_score( MapCell* ,unsigned int );
         float return_h_score( MapCell* );
@@ -25,13 +25,13 @@ class A_Star_Path_Planner
         void compute_path( MapCell* );
         bool found_goal;
 
-        virtual ~A_Star_Path_Planner();
+        ~A_Star_Path_Planner();
 
     private:
 
 
-        const int map_width_ = 100;
-        const int map_height_= 100;
+        const int map_width_ = 10;
+        const int map_height_= 10;
 
         MapCell *start_;
         MapCell *goal_;
@@ -51,6 +51,8 @@ class A_Star_Path_Planner
         std::vector<float> g_; //layer array containing g values for each map cell -->> dist covered
         std::vector<float> h_; //layer array containing h values for each map cell -->> dist to goal
         std::vector<float> f_; //layer array containing f values for each map cell -->> total cost
+
+        std::vector<int> map_; //layer array representing OccupancyGrid map
 
 
 
