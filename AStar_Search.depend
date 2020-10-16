@@ -1,17 +1,32 @@
 # depslib dependency file v1.0
-1602740839 source:/home/kyle/Documents/PROJECTS/AStar_Search/main.cpp
+1602832562 source:/home/kyle/Documents/PROJECTS/AStar_Search/main.cpp
 	<iostream>
 	"include/A_Star_Path_Planner.h"
 
-1602742304 /home/kyle/Documents/PROJECTS/AStar_Search/include/A_Star_Path_Planner.h
+1602832574 /home/kyle/Documents/PROJECTS/AStar_Search/include/A_Star_Path_Planner.h
 	<vector>
 	<list>
 	<cmath>
 	<iostream>
+	<algorithm>
 	"Map_Cell.h"
 
-1602743143 source:/home/kyle/Documents/PROJECTS/AStar_Search/src/A_Star_Path_Planner.cpp
+1602829245 source:/home/kyle/Documents/PROJECTS/AStar_Search/src/A_Star_Path_Planner.cpp
 	"../include/A_Star_Path_Planner.h"
 
 1602567808 /home/kyle/Documents/PROJECTS/AStar_Search/include/Map_Cell.h
+
+1602830149 /home/kyle/Documents/PROJECTS/AStar_Search/include/matplotlibcpp.h
+	<Python.h>
+	<vector>
+	<map>
+	<array>
+	<numeric>
+	<algorithm>
+	<stdexcept>
+	<iostream>
+	<cstdint>
+	<functional>
+	<numpy/arrayobject.h>
+	<opencv2/opencv.hpp>
 

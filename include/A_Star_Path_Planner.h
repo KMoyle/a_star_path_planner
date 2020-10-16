@@ -5,6 +5,7 @@
 #include <list>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 #include "Map_Cell.h"
 
