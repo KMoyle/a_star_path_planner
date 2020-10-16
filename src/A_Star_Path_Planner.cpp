@@ -1,9 +1,10 @@
 #include "../include/A_Star_Path_Planner.h"
 
-A_Star_Path_Planner::A_Star_Path_Planner( MapCell start, MapCell goal )
+A_Star_Path_Planner::A_Star_Path_Planner( MapCell start, MapCell goal,  std::vector<int> map )
 {
     start_ = &start;
     goal_ = &goal;
+    map_ = map;
 
     //init sizes of all a* vecs
     grid_.resize( map_height_ * map_width_ );
@@ -45,11 +46,11 @@ A_Star_Path_Planner::A_Star_Path_Planner( MapCell start, MapCell goal )
         MapCell *current = get_best_neighbour();
 
 
-        //std::cout << "( " << current->get_x() << " , " << current->get_y() << " )" << std::endl;
+        std::cout << "( " << current->get_x() << " , " << current->get_y() << " )" << std::endl;
 
         if ( current->get_x() == goal_->get_x() && current->get_y() == goal_->get_y() ){
             found_goal = true;
-            //std::cout << " FOUND PATH " << std::endl;
+            std::cout << " FOUND PATH " << std::endl;
             compute_path( current );
             break;
         }
@@ -149,57 +150,37 @@ void A_Star_Path_Planner::add_neighbours( MapCell *cmp ){
     // TODO add robustness for inf or obs for real maps
     unsigned int neighbour_id;
 
-    //for x dir
-    if ( cmp->get_x() > 0 && !closed_[ ( cmp->get_x()-1 ) + cmp->get_y() * map_width_] ){
-        neighbour_id = ( cmp->get_x()-1 ) + cmp->get_y() * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
+
+    for ( int y = -1; y < 2; y++){
+        for ( int x = -1; x < 2; x++ ){
+
+            if ( ( cmp->get_x() > 0 ) &&  cmp->get_y() > 0 && ( cmp->get_x() + 1 ) < map_width_ && ( cmp->get_y() + 1 ) < map_height_ && !closed_[ ( cmp->get_x() + (x) ) + ( cmp->get_y() + (y) ) * map_width_] && map_[ ( cmp->get_x() + (x) ) + ( cmp->get_y() + (y) ) * map_width_] != 0){
+                neighbour_id = ( cmp->get_x() + (x) ) + ( cmp->get_y() + (y) ) * map_width_;
+                //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
+                neighbour_ids_.push_back( neighbour_id );
+                parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
+            } else if ( ( cmp->get_x() == 0 ) && ( cmp->get_y() > 0 ) && !closed_[ ( cmp->get_y() + (y) ) * map_width_] && map_[ ( cmp->get_y() + (y) ) * map_width_] != 0 ){
+                neighbour_id =  ( cmp->get_y() + (y) ) * map_width_;
+                //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
+                neighbour_ids_.push_back( neighbour_id );
+                parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
+
+            } else if ( ( cmp->get_x() > 0 ) && ( cmp->get_y() == 0 ) && !closed_[ ( cmp->get_x() + (x) ) ] && map_[ ( cmp->get_x() + (x) ) ] != 0){
+                neighbour_id = ( cmp->get_x() );
+                //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
+                neighbour_ids_.push_back( neighbour_id );
+                parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
+
+            } else if (  ( cmp->get_x() == 0 ) && ( cmp->get_y() == 0 ) && x >= 0 && y >= 0 && !closed_[ ( cmp->get_x() + (x) ) + ( cmp->get_y() + (y) ) * map_width_] && map_[ ( cmp->get_x() + (x) ) + ( cmp->get_y() + (y) ) * map_width_] != 0){
+                neighbour_id = ( cmp->get_x() + (x) ) + ( cmp->get_y() + (y) ) * map_width_;
+                //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
+                neighbour_ids_.push_back( neighbour_id );
+                parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
+            }
+
+        }
     }
-    if ( cmp->get_x() + 1 < map_width_ && !closed_[ ( cmp->get_x()+1 ) + cmp->get_y() * map_width_] ){
-        neighbour_id = ( cmp->get_x()+1 ) + cmp->get_y() * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
-    //for x & y
-    if ( ( cmp->get_x() + 1 ) < map_width_ &&  ( cmp->get_y() + 1 ) < map_height_  && !closed_[ ( cmp->get_x()+1 ) + ( cmp->get_y()+1 ) * map_width_] ){
-        neighbour_id = ( cmp->get_x()+1 ) +  ( cmp->get_y()+1 ) * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
-    if ( cmp->get_x() > 0 &&  cmp->get_y() > 0 && !closed_[ ( cmp->get_x()-1 ) + ( cmp->get_y()-1 ) * map_width_ ] ){
-        neighbour_id = ( cmp->get_x()-1 ) + ( cmp->get_y()-1 ) * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
-    if ( cmp->get_x() > 0 &&  cmp->get_y() + 1 < map_height_  && !closed_[ ( cmp->get_x()-1 ) + ( cmp->get_y()+1 ) * map_width_] ){
-        neighbour_id = ( cmp->get_x()-1 ) + ( cmp->get_y()+1 ) * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-       parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
-    if ( cmp->get_x() + 1 < map_width_ &&  cmp->get_y() > 0 && !closed_[ ( cmp->get_x()+1 ) + ( cmp->get_y()-1 ) * map_width_] ){
-        neighbour_id = ( cmp->get_x()+1 ) + ( cmp->get_y()-1 ) * map_width_;
-       // std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
-    //for y dir
-    if ( cmp->get_y() > 0 && !closed_[ cmp->get_x() + ( cmp->get_y() - 1) * map_width_] ){
-        neighbour_id =  cmp->get_x() + ( cmp->get_y() - 1 ) * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
-    if ( ( cmp->get_y() + 1 ) < map_height_ && !closed_[ cmp->get_x() + ( cmp->get_y() + 1 ) * map_width_] ){
-        neighbour_id =  cmp->get_x() + ( cmp->get_y() + 1 ) * map_width_;
-        //std::cout << "NEW Neighbour -- >> " << "( " << grid_[neighbour_id].get_x() << " , " <<grid_[neighbour_id].get_y()<< " )" << std::endl;
-        neighbour_ids_.push_back( neighbour_id );
-        parent_[ neighbour_id ] = &grid_[cmp->get_x() + cmp->get_y() * map_width_];
-    }
+
 }
 
 
