@@ -12,7 +12,6 @@ int main()
     //creating a row major vector to emulate the ROS nav_msgs/OccupancyGrid
     std::vector<char> map_( 10 * 10 );
 
-    map_[start.get_x() + start.get_y() * 10] = 'S';
     //assigning free space and obs -->> making an obs arc around the goal
     for( unsigned int y = 0; y <  10; y++ ){
         for( unsigned int x = 0; x <  10; x++ ){
