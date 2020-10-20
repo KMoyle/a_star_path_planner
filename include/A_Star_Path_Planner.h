@@ -29,6 +29,8 @@ class A_Star_Path_Planner
 
         bool found_goal;
 
+        bool DEBUG = true;
+
 
 
     private:
