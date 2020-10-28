@@ -16,11 +16,12 @@ class A_Star_Path_Planner
     public:
         A_Star_Path_Planner( MapCell , MapCell,  std::vector<char> );
 
-        float return_g_score( MapCell* ,unsigned int );
-        float return_h_score( MapCell* );
+        inline float return_g_score( MapCell* ,unsigned int );
+        inline float return_h_score( MapCell* );
 
         void add_neighbours( MapCell* );
         MapCell *get_best_neighbour( );
+        inline void setNeighbour( double, double );
 
         void compute_path( MapCell* );
         void print_map();
